@@ -145,25 +145,26 @@ public class StreamAPI {
         //把热量不到400卡路里的菜划分为“低热量”（diet），热量400到700卡路里的菜划为“普通”（normal），高于700卡路里的划为“高热量”（fat）。
         Map<CaloricLevel, List<Dish>> dishesByCaloricLevel = menu.stream().collect(
                 groupingBy(dish -> {
-                    if (dish.getCalories() <= 400) return CaloricLevel.DIET;
-                    else if (dish.getCalories() <= 700) return
-                            CaloricLevel.NORMAL;
-                    else return CaloricLevel.FAT;
+                    if (dish.getCalories() <= 400) {
+                        return CaloricLevel.DIET;
+                    } else if (dish.getCalories() <= 700) {return
+                            CaloricLevel.NORMAL;}
+                    else {return CaloricLevel.FAT;}
                 }));
         System.out.println(dishesByCaloricLevel);
         //上面两组结合的 两级分组
         Map<Dish.Type, Map<CaloricLevel, List<Dish>>> dishesByTypeCaloricLevel = menu.stream()
                 .collect(groupingBy(Dish::getType,
                                 groupingBy(dish -> {
-                                    if (dish.getCalories() <= 400) return CaloricLevel.DIET;
-                                    else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
-                                    else return CaloricLevel.FAT;
+                                    if (dish.getCalories() <= 400){ return CaloricLevel.DIET;}
+                                    else if (dish.getCalories() <= 700) {return CaloricLevel.NORMAL;}
+                                    else {return CaloricLevel.FAT;}
                                 })
                         )
                 );
         System.out.println(dishesByTypeCaloricLevel);
         //菜单中每类菜有多少个
-        Map<Dish.Type, Long> typesCount = menu.stream().collect(groupingBy(Dish::getType,counting()));
+        Map<Dish.Type, Long> typesCount = menu.stream().collect(groupingBy(Dish::getType, counting()));
         System.out.println(typesCount);
         //查找菜单中热量最高的菜肴 按照菜的类型分类
         Map<Dish.Type, Optional<Dish>> mostCaloricByType = menu.stream()
@@ -171,10 +172,10 @@ public class StreamAPI {
                         maxBy(Comparator.comparing(Dish::getCalories))));
         System.out.println(mostCaloricByType);
         Map<Dish.Type, Dish> mostCaloricByTypeDish = menu.stream()
-                        .collect(groupingBy(Dish::getType,
-                                collectingAndThen(
-                                        maxBy(Comparator.comparingInt(Dish::getCalories)),
-                                        Optional::get)));
+                .collect(groupingBy(Dish::getType,
+                        collectingAndThen(
+                                maxBy(Comparator.comparingInt(Dish::getCalories)),
+                                Optional::get)));
         System.out.println(mostCaloricByTypeDish);
 
     }
